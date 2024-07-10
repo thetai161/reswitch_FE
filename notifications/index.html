@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCM</title>
+</head>
+
+<body>
+    <h1>Firebase Push Notification</h1>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDnkguavWZKsGNUmypMv9_SkThUkHV68kA",
+          authDomain: "reswitch-345b0.firebaseapp.com",
+          databaseURL: "https://reswitch-345b0-default-rtdb.firebaseio.com",
+          projectId: "reswitch-345b0",
+          storageBucket: "reswitch-345b0.appspot.com",
+          messagingSenderId: "982740539068",
+          appId: "1:982740539068:web:37fd22821b83dc9259e2b9",
+          measurementId: "G-5CHWBJVCJH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
+
+        navigator.serviceWorker.register("sw.js").then(registration => {
+            getToken(messaging, {
+                serviceWorkerRegistration: registration,
+                vapidKey: 'BBZFFM-UvzwF1BNSuswRmbTOkvw2KmO2sffstNfftxcPZTX9p0_WBvGoTv5x0hsvW_3gyw1L3n8LzZZNCqVughg' }).then((currentToken) => {
+                if (currentToken) {
+                    // save token in database 
+                    console.log("Token is: "+currentToken);
+                } else {
+                    console.log('No registration token available. Request permission to generate one.');
+                }
+            }).catch((err) => {
+                console.log('An error occurred while retrieving token. ', err);
+            });
+        });
+
+
+
+    </script>
+</body>
+
+</html>

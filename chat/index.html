@@ -1,0 +1,135 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>WebSocket Example</title>
+</head>
+
+<body>
+	<h1>GFG WebSocket Example</h1>
+  <label>Content</label>
+  <input type="text" id="content" placeholder="Type something...">
+  <label>Message type</label>
+
+  <input type="text" id="message_type" placeholder="Type something...">
+	<button id="submitButton">Submit</button>
+	<div id="container"></div>
+
+	<script>
+
+		// Create a WebSocket connection to the server
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjA5NTM1MTcsInVzZXJfaWQiOiIyIn0.1Td4kYF6A7owlzf5zgo-vmLfaR3vIerYutfw3HhDGlM";
+		const socket = new WebSocket(`ws://127.0.0.1:8000/chat/ws/message?token=${token}`);
+
+		// Function to display messages on the web page
+		function showMessage(message) {
+			const messageContainer = document.getElementById('container');
+			const messageElement = document.createElement('div');
+			messageElement.textContent = message;
+			messageContainer.appendChild(messageElement);
+		}
+
+		// Event handler for when the connection is established
+		socket.addEventListener('open', (event) => {
+			showMessage('Connected to server.');
+		});
+
+		// Event handler for receiving messages from the server
+		socket.onmessage = (event) => {
+			showMessage("You sent : " + event.data)
+		}
+
+		// Event handler for when the connection is closed
+		socket.addEventListener('close', (event) => {
+			showMessage('Connection closed.');
+		});
+
+    const content = document.getElementById("content");
+    const message_type = document.getElementById("message_type");
+		const submitButton = document.getElementById("submitButton");
+
+		submitButton.addEventListener("click", function () {
+
+      const contentValue = content.value;
+      const messageTypeValue = message_type.value;
+      obj = {"content": contentValue, "message_type": messageTypeValue}
+      console.log(obj)
+			socket.send(JSON.stringify(obj))
+		});
+
+	</script>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>WebSocket Example</title>
+    </head>
+
+    <body>
+        <h1>GFG WebSocket Example</h1>
+        <label>Content</label>
+        <input type="file" id="content" onchange="encodeImageFileAsURL()" />
+        <div id="container"></div>
+
+        <script>
+            // Create a WebSocket connection to the server
+            const token =
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjA5NTM1MTcsInVzZXJfaWQiOiIyIn0.1Td4kYF6A7owlzf5zgo-vmLfaR3vIerYutfw3HhDGlM"; // bearer token user 
+            const socket = new WebSocket(
+                `ws://127.0.0.1:8000/chat/ws/message?token=${token}`
+            );
+
+            // Function to display messages on the web page
+            function showMessage(message) {
+                const messageContainer = document.getElementById("container");
+                const messageElement = document.createElement("div");
+                messageElement.textContent = message;
+                messageContainer.appendChild(messageElement);
+            }
+
+            // Event handler for when the connection is established
+            socket.addEventListener("open", (event) => {
+                showMessage("Connected to server.");
+            });
+
+            // Event handler for receiving messages from the server
+            socket.onmessage = (event) => {
+                showMessage("You sent : " + event.data);
+            };
+
+            // Event handler for when the connection is closed
+            socket.addEventListener("close", (event) => {
+                showMessage("Connection closed.");
+            });
+
+            const content = document.getElementById("content");
+            const message_type = document.getElementById("message_type");
+            const submitButton = document.getElementById("submitButton");
+
+            function encodeImageFileAsURL() {
+                var filesSelected = content.files;
+                if (filesSelected.length > 0) {
+                    var fileToLoad = filesSelected[0];
+
+                    var fileReader = new FileReader();
+
+                    fileReader.onload = function (fileLoadedEvent) {
+                        var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                        const contentValue = srcData;
+                        obj = { content: contentValue, message_type: 'image' };
+                        console.log(obj);
+                        socket.send(JSON.stringify(obj));
+                    };
+                    fileReader.readAsDataURL(fileToLoad);
+                }
+            }
+        </script>
+    </body>
+</html>
